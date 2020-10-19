@@ -24,10 +24,10 @@ class Game
 
     if response.length > 1
       print "Invalid Entry! Enter a single letter from a-z"
-      get_letter
+      request_letter
     elsif !response.match?(/[a-z]/)
       print "Invalid Entry! Enter a single letter from a-z"
-      get_letter
+      request_letter
     end
     response
   end
@@ -113,7 +113,7 @@ loop do
 
   while board.attempts > 0 do  
     board.draw_board
-    puts board.secret_word
+    puts board.secret_word # Delete Later
     board.check_letter(board.request_letter)
     board.check_win
   end
