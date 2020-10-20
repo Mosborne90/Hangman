@@ -1,26 +1,27 @@
---- !ruby/object:Game
-board:
+---
+:board:
 - - " "
   - O
   - " "
-- - " "
+- - "/"
   - "|"
+  - "\\"
+- - "/"
   - " "
-- - " "
   - " "
-  - " "
-attempts: 4
-secret_word: spacewalker
-hint_bar:
-- " S "
-- " _ "
-- " A "
-- " C "
+:attempts: 1
+:secret_word: unfrequented
+:hint_bar:
 - " _ "
 - " _ "
-- " A "
+- " F "
+- " R "
+- " E "
+- " Q "
+- " _ "
+- " E "
 - " _ "
 - " _ "
-- " _ "
-- " _ "
-game_result:
+- " E "
+- " D "
+:game_result:

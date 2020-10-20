@@ -1,1 +1,1 @@
-# Hangman
+# Hangman Terminal Game

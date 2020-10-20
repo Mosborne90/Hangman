@@ -2,7 +2,6 @@ require 'yaml'
 
 class Game
   attr_accessor :board, :attempts, :secret_word, :hint_bar, :game_result
-  
   def initialize(board, attempts, secret_word, hint_bar, game_result)
     @board = board
     @attempts = attempts
@@ -125,7 +124,6 @@ class Game
   end
 end
 
-#Method not in use
 def load_game_check
   system "cls" || "clear"
   puts "**Thanks for playing Hangman**"
@@ -140,22 +138,19 @@ def load_game_check
   save_file = File.read("save_file.yaml")
 
   if save_file.length > 1 && response.match?(/y/)
-    Game.from_yaml(save_file)
+    board = Game.from_yaml(save_file)
   else
-    Game.new([[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], 6, nil, nil, nil)
+    board = Game.new([[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], 6, nil, nil, nil)
+    board.select_secret_word
   end
-
+  board
 end
 
-save_file = File.read("save_file.yaml")
-
 loop do
-  board = Game.from_yaml(save_file)
-  board.select_secret_word #Need to move later, will overwrite imported save secret_word variable
+  board = load_game_check
 
   while board.attempts > 0 do  
     board.draw_board
-    puts board.secret_word # Delete Later
     board.check_letter(board.request_letter)
     board.check_win
   end
