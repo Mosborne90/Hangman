@@ -1,17 +1,31 @@
+require 'yaml'
+
 class Game
-  attr_accessor :board, :hint_bar, :game_result, :attempts, :secret_word
+  attr_accessor :board, :attempts, :secret_word, :hint_bar, :game_result
   
-  def initialize
-    @board = [
-      [" ", " ", " "],
-      [" ", " ", " "],
-      [" ", " ", " "]]
-    @attempts = 6
-    @secret_word = nil
-    @hint_bar = nil
-    @game_result = nil
+  def initialize(board, attempts, secret_word, hint_bar, game_result)
+    @board = board
+    @attempts = attempts
+    @secret_word = secret_word
+    @hint_bar = hint_bar
+    @game_result = game_result
   end
-  
+
+  def to_yaml
+    YAML.dump ({
+      :board => @board,
+      :attempts => @attempts,
+      :secret_word => @secret_word,
+      :hint_bar => @hint_bar,
+      :game_result => @game_result
+    })
+  end
+
+  def self.from_yaml(string)
+    data = YAML.load(string)
+    self.new(data[:board], data[:attempts], data[:secret_word], data[:hint_bar], data[:game_result])
+  end
+
   def select_secret_word
     dictionary = File.readlines("dictionary.txt").map(&:chomp)
     @secret_word = dictionary[rand(dictionary.length)].downcase
@@ -19,10 +33,14 @@ class Game
   end
 
   def request_letter
-    print "\nGuess a letter: "
+    print "\nGuess a letter or type 'save' to save the game: "
     response = gets.chomp.downcase
 
-    if response.length > 1
+    if response == 'save'
+      File.open("save_file.yaml", "w") {|file| file.write(self.to_yaml)}
+      puts "The game has been saved!"
+      request_letter
+    elsif response.length > 1
       print "Invalid Entry! Enter a single letter from a-z"
       request_letter
     elsif !response.match?(/[a-z]/)
@@ -107,9 +125,33 @@ class Game
   end
 end
 
+#Method not in use
+def load_game_check
+  system "cls" || "clear"
+  puts "**Thanks for playing Hangman**"
+  print "\nWould you like to load the previous save file?(y/n): "
+
+  response = gets.chomp.downcase
+
+  if !['yes', 'y', 'no', 'n'].include?(response)
+    load_game_check
+  end
+
+  save_file = File.read("save_file.yaml")
+
+  if save_file.length > 1 && response.match?(/y/)
+    Game.from_yaml(save_file)
+  else
+    Game.new([[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], 6, nil, nil, nil)
+  end
+
+end
+
+save_file = File.read("save_file.yaml")
+
 loop do
-  board = Game.new
-  board.select_secret_word
+  board = Game.from_yaml(save_file)
+  board.select_secret_word #Need to move later, will overwrite imported save secret_word variable
 
   while board.attempts > 0 do  
     board.draw_board
