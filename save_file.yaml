@@ -10,18 +10,11 @@
   - " "
   - " "
 :attempts: 1
-:secret_word: unfrequented
+:secret_word: gazer
 :hint_bar:
 - " _ "
-- " _ "
-- " F "
-- " R "
-- " E "
-- " Q "
-- " _ "
-- " E "
+- " A "
+- " Z "
 - " _ "
 - " _ "
-- " E "
-- " D "
 :game_result:
